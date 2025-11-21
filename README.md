@@ -1,204 +1,129 @@
-<div align="left">
+SPACK 
 
-<h2>
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/spack/spack/refs/heads/develop/share/spack/logo/spack-logo-white-text.svg" width="250">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/spack/spack/refs/heads/develop/share/spack/logo/spack-logo-text.svg" width="250">
-  <img alt="Spack" src="https://raw.githubusercontent.com/spack/spack/refs/heads/develop/share/spack/logo/spack-logo-text.svg" width="250">
-</picture>
+export env=/mnt/ssd/aryawu/spack-trace/env
+export SPACK_ROOT=/mnt/ssd/aryawu/spack
+export PATH=$SPACK_ROOT/bin:$PATH
 
-<br>
-<br clear="all">
+. /mnt/ssd/aryawu/spack/share/spack/setup-env.sh
+(base) aryawu@boa:~/spack/var/spack/environments/default/gmake/src$ spack env activate
+==> Activated default environment in /mnt/ssd/aryawu/spack/var/spack/environments/default
 
-<a href="https://github.com/spack/spack/actions/workflows/ci.yml"><img src="https://github.com/spack/spack/workflows/ci/badge.svg" alt="CI Status"></a>
-<a href="https://github.com/spack/spack/actions/workflows/bootstrapping.yml"><img src="https://github.com/spack/spack/actions/workflows/bootstrap.yml/badge.svg" alt="Bootstrap Status"></a>
-<a href="https://github.com/spack/spack/actions/workflows/build-containers.yml"><img src="https://github.com/spack/spack/actions/workflows/build-containers.yml/badge.svg" alt="Containers Status"></a>
-<a href="https://spack.readthedocs.io"><img src="https://readthedocs.org/projects/spack/badge/?version=latest" alt="Documentation Status"></a>
-<a href="https://codecov.io/gh/spack/spack"><img src="https://codecov.io/gh/spack/spack/branch/develop/graph/badge.svg" alt="Code coverage"/></a>
-<a href="https://slack.spack.io"><img src="https://slack.spack.io/badge.svg" alt="Slack"/></a>
-<a href="https://matrix.to/#/#spack-space:matrix.org"><img src="https://img.shields.io/matrix/spack-space%3Amatrix.org?label=matrix" alt="Matrix"/></a>
+Using gmake as an example:
 
-</h2>
+Step 1: Develop the package:
+spack develop <pkg>
 
-**[Getting Started] &nbsp; • &nbsp; [Config] &nbsp; • &nbsp; [Community] &nbsp; • &nbsp; [Contributing] &nbsp; • &nbsp; [Packaging Guide] &nbsp; • &nbsp; [Packages]**
+(base) aryawu@boa:~/spack-trace$ spack develop gmake
+==> Cloning source code for gmake@=4.4.1
+==> Using cached archive: /mnt/ssd/aryawu/spack/var/spack/cache/_source-cache/archive/dd/dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3.tar.gz
+==> Updating view at /mnt/ssd/aryawu/spack/var/spack/environments/default/.spack-env/view
 
-[Getting Started]: https://spack.readthedocs.io/en/latest/getting_started.html
-[Config]: https://spack.readthedocs.io/en/latest/configuration.html
-[Community]: #community
-[Contributing]: https://spack.readthedocs.io/en/latest/contribution_guide.html
-[Packaging Guide]: https://spack.readthedocs.io/en/latest/packaging_guide_creation.html
-[Packages]: https://github.com/spack/spack-packages
+(base) aryawu@boa:~/spack-trace$ spack location -p gmake
+/mnt/ssd/aryawu/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/gmake
 
-</div>
 
-Spack is a multi-platform package manager that builds and installs
-multiple versions and configurations of software. It works on Linux,
-macOS, Windows, and many supercomputers. Spack is non-destructive: installing a
-new version of a package does not break existing installations, so many
-configurations of the same package can coexist.
+Step 2: Cd into the source code directory
+(base) aryawu@boa:~/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/gmake$ spack stage gmake
+==> Using cached archive: /mnt/ssd/aryawu/spack/var/spack/cache/_source-cache/archive/dd/dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3.tar.gz
+==> Staged gmake in /tmp/aryawu/spack-stage/spack-stage-gmake-4.4.1-2ngndgntlx3boqvtcl7kkhj4vtcjmqdu
 
-Spack offers a simple "spec" syntax that allows users to specify versions
-and configuration options. Package files are written in pure Python, and
-specs allow package authors to write a single script for many different
-builds of the same package.  With Spack, you can build your software
-*all* the ways you want to.
+cd spack-stage-gmake-4.4.1-2ngndgntlx3boqvtcl7kkhj4vtcjmqdu/spack-src/src
+(base) aryawu@boa:/tmp/aryawu/spack-stage/spack-stage-gmake-4.4.1-2ngndgntlx3boqvtcl7kkhj4vtcjmqdu/spack-src/src$ ls
+amiga.c       debug.h     gettext.h        load.c      remake.c        version.c
+amiga.h       default.c   gmk-default.h    main.c      remote-cstms.c  vmsdir.h
+ar.c          dep.h       gmk-default.scm  makeint.h   remote-stub.c   vms_exit.c
+arscan.c      dir.c       gnumake.h        misc.c      rule.c          vms_export_symbol.c
+….
 
-See the
-[Feature Overview](https://spack.readthedocs.io/en/latest/features.html)
-for examples and highlights.
+Step 3: Edit source
+cp output.c output.c.bak
 
-Installation
-----------------
+cp ~/spack-trace/output.c output.c
+grep 'BUG-INJECTED-HERE' output.c
 
-To install spack, first make sure you have Python & Git.
-Then:
+Step4: Rebuild
+spack install --dirty --keep-stage gmake
 
-```bash
-git clone --depth=2 https://github.com/spack/spack.git
-```
+Step5: Test
+make ~/spack-trace/Makefile.test_bug
+Or
+./opt/spack/linux-icelake/gmake-4.4.1-bf6onyzhtpmdaqxdwqr53qgwi2gqhael/bin/make
 
-```bash
-# For bash/zsh/sh
-. spack/share/spack/setup-env.sh
+(base) aryawu@boa:~/spack$ ./opt/spack/linux-icelake/gmake-4.4.1-bf6onyzhtpmdaqxdwqr53qgwi2gqhael/bin/make
+=================================
+  GNU Make Test Suite Running
+=================================
 
-# For tcsh/csh
-source spack/share/spack/setup-env.csh
+Test 1: Accessing GNU Make globals
+  ✓ version: 4.4.1
 
-# For fish
-. spack/share/spack/setup-env.fish
-```
+Test 2: Calling GNU Make function
+  ✓ initialize_global_hash_tables() completed
 
-```bash
-# Now you're ready to install a package!
-spack install zlib-ng
-```
+Test 3: Checking flags
+  silent_flag: 0
+  debug_flag: 0
 
-Documentation
-----------------
+=================================
+  All tests passed!
+=================================
 
-[**Full documentation**](https://spack.readthedocs.io/) is available, or
-run `spack help` or `spack help --all`.
 
-For a cheat sheet on Spack syntax, run `spack help --spec`.
+In general how to run it?
+find $(spack location -i <pkg>) -type f -executable | grep -v ".so"
+find $(spack location -i /2ngndgn) -type f -executable | grep -v ".so"
+/mnt/ssd/aryawu/spack/opt/spack/linux-icelake/gmake-4.4.1-2ngndgntlx3boqvtcl7kkhj4vtcjmqdu/bin/make
 
-Tutorial
-----------------
 
-We maintain a
-[**hands-on tutorial**](https://spack-tutorial.readthedocs.io/).
-It covers basic to advanced usage, packaging, developer features, and large HPC
-deployments.  You can do all of the exercises on your own laptop using a
-Docker container.
 
-Feel free to use these materials to teach users at your organization
-about Spack.
 
-Community
-------------------------
 
-Spack is an open source project.  Questions, discussion, and
-contributions are welcome. Contributions can be anything from new
-packages to bugfixes, documentation, or even new core features.
+——————————————————————————
+So far above is only a way to do normal tests.
+What about Unity testing framework?
+We need a way to compile Unity before linking.
+For coreutils we modified the Makefile.
+But Spack does not have a global makefile. Build is often multi-step, multi-directory, with Autotools, CMake, or custom scripts
 
-Resources:
+In Coreutils, including tests.c inside the program source lets you leverage the existing build system and Makefile: all compilation flags, object files, libraries, and linking steps are already handled.
+You don’t need to figure out how to build a separate test executable from scratch — the program binary itself becomes the test runner.
+For unity to work in coreutils I did LDADD = src/libver.a lib/libcoreutils.a unity/unity.o $(LIBINTL) $(MBRTOWC_LIB) \
+        $(INTL_MACOSX_LIBS) lib/libcoreutils.a
 
-* **Slack workspace**: [spackpm.slack.com](https://spackpm.slack.com).
-  To get an invitation, visit [slack.spack.io](https://slack.spack.io).
-* **Matrix space**: [#spack-space:matrix.org](https://matrix.to/#/#spack-space:matrix.org):
-  [bridged](https://github.com/matrix-org/matrix-appservice-slack#matrix-appservice-slack) to Slack.
-* [**Github Discussions**](https://github.com/spack/spack/discussions):
-  for Q&A and discussions. Note the pinned discussions for announcements.
-* **X**: [@spackpm](https://twitter.com/spackpm). Be sure to
-  `@mention` us!
-* **Mailing list**: [groups.google.com/d/forum/spack](https://groups.google.com/d/forum/spack):
-  only for announcements. Please use other venues for discussions.
 
-Contributing
-------------------------
-Contributing to Spack is relatively easy.  Just send us a
-[pull request](https://help.github.com/articles/using-pull-requests/).
+But for spack, doing exactly what I did in Coreutils might requires patching the package’s build system (or spack install script) to:
+    1. Compile unity.o
+    2. Replace or inject the program’s main() with the test main
+    3. Ensure all object files get linked correctly
 
-Most contributors will want to contribute to Spack's community package
-recipes. To do that, you should visit the
-**[spack-packages repository][Packages]**.
+Claude says: 
+Option1: Modify package recipes to use unity.o
+For each package you want to test, modify its package.py:
 
-If you want to contribute to Spack itself, you can submit a pull request
-to the [spack repository](https://github.com/spack/spack) (this repository).
+python
+def setup_build_environment(self, env):
+    # Add unity header to include path
+    env.append_flags('CFLAGS', '-I/path/to/spack-unity')
+    env.append_flags('CXXFLAGS', '-I/path/to/spack-unity')
+    
+    # Add unity.o to linker flags
+    env.append_flags('LDFLAGS', '/path/to/spack-unity/unity.o')
 
-Your PR must:
+Option2: Create a Unity Spack package
+The more "Spack-native" approach:
 
-  1. Make ``develop`` the destination branch;
-  2. Pass Spack's unit tests, documentation tests, and package build tests;
-  3. Be [PEP 8](https://www.python.org/dev/peps/pep-0008/) compliant;
-  4. Sign off all commits with `git commit --signoff`. Signoff says that you
-     agree to the [Developer Certificate of Origin](https://developercertificate.org).
-     Note that this is different from [signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits),
-     which you may also do, but it's not required.
+create a unity package
+class Unity(Package):
+    """Unity Test Framework"""
+    
+    def install(self, spec, prefix):
+        mkdirp(prefix.lib)
+        mkdirp(prefix.include)
+        
+        gcc = which('gcc')
+        gcc('-c', '-fPIC', '-o', 'unity.o', 'unity.c')
+        
+        install('unity.o', prefix.lib)
+        install('unity.h', prefix.include)
+Then packages can depends_on('unity', type='build') and link against it.
 
-We enforce these guidelines with our continuous integration (CI) process.
-To run tests locally, and for helpful tips on git, see our
-[Contribution Guide](https://spack.readthedocs.io/en/latest/contribution_guide.html).
-
-Releases
---------
-
-For multi-user site deployments or other use cases that need very stable
-software installations, we recommend using Spack's
-[stable releases](https://github.com/spack/spack/releases).
-
-Each Spack release series also has a corresponding branch, e.g.
-`releases/v0.14` has `0.14.x` versions of Spack, and `releases/v0.13` has
-`0.13.x` versions. We backport important bug fixes to these branches but
-we do not advance the package versions or make other changes that would
-change the way Spack concretizes dependencies within a release branch.
-So, you can base your Spack deployment on a release branch and `git pull`
-to get fixes, without the package churn that comes with `develop`.
-
-The latest release is always available with the `releases/latest` tag.
-
-See the [docs on releases](https://spack.readthedocs.io/en/latest/developer_guide.html#releases)
-for more details.
-
-Code of Conduct
-------------------------
-
-Please note that Spack has a
-[**Code of Conduct**](.github/CODE_OF_CONDUCT.md). By participating in
-the Spack community, you agree to abide by its rules.
-
-Authors
-----------------
-Many thanks go to Spack's [contributors](https://github.com/spack/spack/graphs/contributors).
-
-Spack was created by Todd Gamblin, tgamblin@llnl.gov.
-
-### Citing Spack
-
-If you are referencing Spack in a publication, please cite the following paper:
-
- * Todd Gamblin, Matthew P. LeGendre, Michael R. Collette, Gregory L. Lee,
-   Adam Moody, Bronis R. de Supinski, and W. Scott Futral.
-   [**The Spack Package Manager: Bringing Order to HPC Software Chaos**](https://www.computer.org/csdl/proceedings/sc/2015/3723/00/2807623.pdf).
-   In *Supercomputing 2015 (SC’15)*, Austin, Texas, November 15-20 2015. LLNL-CONF-669890.
-
-On GitHub, you can copy this citation in APA or BibTeX format via the "Cite this repository"
-button. Or, see the comments in `CITATION.cff` for the raw BibTeX.
-
-License
-----------------
-
-Spack is distributed under the terms of both the MIT license and the
-Apache License (Version 2.0). Users may choose either license, at their
-option.
-
-All new contributions must be made under both the MIT and Apache-2.0
-licenses.
-
-See [LICENSE-MIT](https://github.com/spack/spack/blob/develop/LICENSE-MIT),
-[LICENSE-APACHE](https://github.com/spack/spack/blob/develop/LICENSE-APACHE),
-[COPYRIGHT](https://github.com/spack/spack/blob/develop/COPYRIGHT), and
-[NOTICE](https://github.com/spack/spack/blob/develop/NOTICE) for details.
-
-SPDX-License-Identifier: (Apache-2.0 OR MIT)
-
-LLNL-CODE-811652
